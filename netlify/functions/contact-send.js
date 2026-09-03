@@ -73,7 +73,15 @@ exports.handler = async (event) => {
     console.log(`[contact] relay responded ${upstream.status}: ${data.message || data.raw || 'ok'}`);
 
     if (!ok) {
-      return respond(502, { ok: false, message: data.message || data.raw || 'Mail relay rejected the message.' });
+      const raw = String(data.message || data.raw || '');
+      if (/activation|activate/i.test(raw)) {
+        return respond(200, {
+          ok: false,
+          activation: true,
+          message: 'Form not activated yet. The inbox owner must visit formsubmit.co/email/gouldevelop798@gmail.com and click the "Activate Form" link sent to gouldevelop798@gmail.com once.'
+        });
+      }
+      return respond(502, { ok: false, message: raw || 'Mail relay rejected the message.' });
     }
     return respond(200, { ok: true, message: data.message || 'Message sent.' });
   } catch (err) {

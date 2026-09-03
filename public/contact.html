@@ -1251,7 +1251,11 @@
         });
         const out = await res.json();
         if (!res.ok || !out.ok) {
-          throw new Error(out.message || 'Send failed');
+          const err = new Error(out.message || 'Send failed');
+          if (out.activation) {
+            err.activation = true;
+          }
+          throw err;
         }
         statusEl.classList.remove('sending');
         statusEl.textContent = 'MESSAGE SENT';
@@ -1261,9 +1265,11 @@
         statusEl.classList.remove('sending');
         statusEl.textContent = 'FAILED';
         statusEl.classList.add('failed');
-        sendNote.textContent = (err.message && !err.message.includes('fetch'))
-          ? err.message
-          : 'Message could not be sent. Check your connection and try again.';
+        sendNote.textContent = (err.activation)
+          ? 'The inbox email is not activated yet. Its owner must visit formsubmit.co/email/gouldevelop798@gmail.com and click the "Activate Form" link sent to that address once before messages can be received.'
+          : (err.message && !err.message.includes('fetch'))
+            ? err.message
+            : 'Message could not be sent. Check your connection and try again.';
       } finally {
         btn.disabled = false;
       }
