@@ -1,0 +1,9 @@
+[build]
+  command = "echo 'Static site - no build step required'"
+  publish = "public"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 404

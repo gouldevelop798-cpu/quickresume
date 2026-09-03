@@ -1,0 +1,5 @@
+/contact/send      /.netlify/functions/contact-send    200
+/                  /index.html                         200
+/resume            /resume.html                        200
+/resume-display    /resume-display.html                200
+/contact           /contact.html                       200
