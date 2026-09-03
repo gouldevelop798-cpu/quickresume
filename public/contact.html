@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QuickResume — Contact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy: #0A2540;
+    --slate-blue: #123A66;
+    --accent: #2563EB;
+    --amber: #F5B700;
+    --off-white: #F8FAFC;
+    --body-text: #334155;
+    --white: #FFFFFF;
+    --danger: #EF4444;
+    --success: #22C55E;
+    --radius: 12px;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--body-text);
+    background: var(--navy);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  h1, h2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    line-height: 1.15;
+  }
+
+  a, button {
+    cursor: pointer;
+  }
+
+  /* ---------- Page background ---------- */
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(37, 99, 235, 0.45), transparent 60%),
+      radial-gradient(700px 460px at 5% 110%, rgba(245, 183, 0, 0.12), transparent 60%),
+      linear-gradient(135deg, #0A2540 0%, #123A66 60%, #0A2540 100%);
+  }
+
+  .blob {
+    position: fixed;
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .blob-1 {
+    width: 420px;
+    height: 420px;
+    top: -120px;
+    right: -110px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.5), transparent 70%);
+  }
+
+  .blob-2 {
+    width: 380px;
+    height: 380px;
+    bottom: -140px;
+    left: -130px;
+    background: radial-gradient(circle, rgba(245, 183, 0, 0.18), transparent 70%);
+  }
+
+  .blob-3 {
+    width: 300px;
+    height: 300px;
+    top: 40%;
+    left: 12%;
+    background: radial-gradient(circle, rgba(79, 138, 255, 0.3), transparent 70%);
+  }
+
+  /* ---------- Navigation ---------- */
+  .nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    padding: 0 48px;
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .logo {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+  }
+
+  .logo span {
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    padding: 6px 2px;
+    position: relative;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--white);
+  }
+
+  .nav-links a.active {
+    color: #8FB7FF;
+  }
+
+  .nav-links a.active::after {
+    transform: scaleX(1);
+  }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 8px;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--white);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .nav-toggle.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav-toggle.open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ---------- Page hero banner ---------- */
+  .page-hero {
+    text-align: center;
+    padding: 132px 24px 72px;
+    background:
+      radial-gradient(640px 260px at 50% -40%, rgba(37, 99, 235, 0.35), transparent 65%),
+      linear-gradient(180deg, rgba(18, 58, 102, 0.92) 0%, rgba(18, 58, 102, 0.45) 62%, rgba(18, 58, 102, 0) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .page-hero .overline {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #8FB7FF;
+  }
+
+  .page-hero h1 {
+    margin-top: 14px;
+    font-size: 52px;
+    letter-spacing: -1px;
+    color: var(--white);
+  }
+
+  .page-hero .subline {
+    margin-top: 14px;
+    font-size: 16px;
+    color: #B7C6DC;
+  }
+
+  /* ---------- Split layout ---------- */
+  .contact-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: calc(100vh - 68px);
+  }
+
+  /* ---------- Left panel — location ---------- */
+  .panel-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 64px 56px;
+  }
+
+  .location-block {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .pin-chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(37, 99, 235, 0.16);
+    border: 1px solid rgba(37, 99, 235, 0.45);
+    color: var(--accent);
+  }
+
+  .location-block .loc-primary {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--white);
+    line-height: 1.3;
+  }
+
+  .location-block .loc-secondary {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .map-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4), 0 24px 48px rgba(2, 12, 26, 0.45);
+    background: var(--slate-blue);
+  }
+
+  .map-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .map-wrap::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 56px;
+    background: linear-gradient(180deg, rgba(10, 37, 64, 0) 0%, rgba(10, 37, 64, 0.55) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .map-pin-pulse {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .map-pin-pulse .ring {
+    position: absolute;
+    left: -22px;
+    top: -22px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(37, 99, 235, 0.75);
+    animation: pinRipple 2.4s ease-out infinite;
+  }
+
+  .map-pin-pulse .ring-2 {
+    animation-delay: 1.2s;
+  }
+
+  @keyframes pinRipple {
+    0% {
+      transform: scale(0.35);
+      opacity: 0.9;
+    }
+    70% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+
+  .hours-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: rgba(10, 37, 64, 0.55);
+    border: 1px solid rgba(37, 99, 235, 0.55);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .hours-pill svg {
+    color: #8FB7FF;
+    flex: 0 0 auto;
+  }
+
+  /* ---------- Right panel — glass form ---------- */
+  .panel-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 40px;
+  }
+
+  .glass {
+    width: 100%;
+    max-width: 700px;
+    background: rgba(255, 255, 255, 0.15);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    box-shadow: 0 24px 60px rgba(2, 12, 26, 0.45);
+    padding: 44px 44px 48px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px 28px;
+  }
+
+  .span-2 {
+    grid-column: 1 / -1;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .field label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .field label .req {
+    color: var(--danger);
+    margin-right: 2px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 13px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--navy);
+    background: var(--white);
+    border: 1.5px solid #CBD5E1;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .field textarea {
+    min-height: 170px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .field select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+  }
+
+  .field input.error,
+  .field select.error,
+  .field textarea.error {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  }
+
+  .phone-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .phone-row .custom-select {
+    flex: 1 1 124px;
+    min-width: 108px;
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--navy);
+  }
+
+  .phone-row .custom-select .select-selected {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 36px 13px 14px;
+    background: var(--white);
+    border: 1.5px solid #CBD5E1;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    user-select: none;
+  }
+
+  .phone-row .custom-select .select-selected img {
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .phone-row .custom-select .select-selected::after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #94A3B8;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+  }
+
+  .phone-row .custom-select.open .select-selected::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  .phone-row .custom-select .select-selected:focus,
+  .phone-row .custom-select.open .select-selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    outline: none;
+  }
+
+  .phone-row .custom-select .select-items {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border: 1.5px solid #CBD5E1;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 100;
+    overflow: hidden;
+  }
+
+  .phone-row .custom-select.open .select-items {
+    display: block;
+  }
+
+  .phone-row .custom-select .select-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .phone-row .custom-select .select-item:hover {
+    background: #F1F5F9;
+  }
+
+  .phone-row .custom-select .select-item.selected {
+    background: #EFF6FF;
+    font-weight: 600;
+  }
+
+  .phone-row .custom-select .select-item img {
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .phone-row .custom-select.error .select-selected {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  }
+
+  .phone-row input {
+    flex: 2 1 150px;
+    min-width: 0;
+  }
+
+  .error-msg {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--danger);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  .error-msg:empty {
+    display: none;
+  }
+
+  /* ---------- Submit ---------- */
+  .btn-send {
+    width: 100%;
+    margin-top: 38px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--white);
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    padding: 17px;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-send:hover {
+    background: #1E4FCF;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.45);
+  }
+
+  #status {
+    display: block;
+    margin-top: 16px;
+    min-height: 20px;
+    text-align: center;
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+
+  #status.success {
+    color: var(--success);
+  }
+
+  #status.sending {
+    color: #8FB7FF;
+  }
+
+  #status.failed {
+    color: #F87171;
+  }
+
+  #send-note {
+    margin-top: 6px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #B7C6DC;
+  }
+
+  #send-note:empty {
+    display: none;
+  }
+
+  .btn-send:disabled {
+    opacity: 0.65;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    background: var(--navy);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 72px 48px 32px;
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+
+  .footer-tagline {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--white);
+    max-width: 420px;
+    line-height: 1.35;
+  }
+
+  .footer-links h3 {
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+
+  .footer-links ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-links a {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #B7C6DC;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover {
+    color: var(--white);
+  }
+
+  .copyright {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    font-size: 13px;
+    color: #7A8CA6;
+  }
+
+  /* ---------- Scroll animations ---------- */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .delay-1 { transition-delay: 0.15s; }
+  .delay-2 { transition-delay: 0.3s; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .nav {
+      padding: 0 24px;
+    }
+
+    .nav-toggle {
+      display: flex;
+    }
+
+    .nav-links {
+      position: absolute;
+      top: 68px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--white);
+      border-bottom: 1px solid #E2E8F0;
+      padding: 16px 24px 24px;
+      box-shadow: 0 12px 24px rgba(10, 37, 64, 0.08);
+      opacity: 0;
+      transform: translateY(-12px);
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .nav-links.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .nav-links a {
+      width: 100%;
+      text-align: left;
+      padding: 12px 4px;
+      font-size: 16px;
+      color: var(--navy);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent);
+    }
+
+    .nav-links a.active::after {
+      display: none;
+    }
+
+    .page-hero {
+      padding: 104px 20px 56px;
+    }
+
+    .page-hero h1 {
+      font-size: 34px;
+    }
+  }
+
+  @media (max-width: 1150px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .contact-split {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .panel-left {
+      padding: 44px 24px 36px;
+    }
+
+    .map-wrap {
+      aspect-ratio: auto;
+      height: 260px;
+    }
+
+    .panel-right {
+      padding: 12px 20px 56px;
+    }
+
+    .glass {
+      padding: 32px 22px 36px;
+      border-radius: 24px;
+    }
+
+    .footer {
+      padding: 56px 24px 28px;
+    }
+
+    .footer-inner {
+      flex-direction: column;
+      gap: 36px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nav {
+      padding: 0 16px;
+    }
+
+    .logo {
+      font-size: 19px;
+    }
+
+    .page-hero {
+      padding: 88px 16px 48px;
+    }
+
+    .page-hero h1 {
+      font-size: 28px;
+    }
+
+    .page-hero p {
+      font-size: 15px;
+    }
+
+    .panel-left {
+      padding: 36px 16px 28px;
+    }
+
+    .panel-right {
+      padding: 12px 12px 44px;
+    }
+
+    .glass {
+      padding: 28px 16px 32px;
+      border-radius: 20px;
+    }
+
+    .phone-row {
+      gap: 8px;
+    }
+
+    .phone-row .custom-select {
+      min-width: 0;
+      flex: 1 1 96px;
+    }
+
+    .phone-row input[type="tel"] {
+      flex: 1 1 100%;
+    }
+
+    .btn-send {
+      width: 100%;
+    }
+
+    .footer {
+      padding: 44px 16px 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-up {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .map-pin-pulse .ring {
+      animation: none;
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="page-bg"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <header class="nav">
+    <a href="/" class="logo">Quick<span>Resume</span></a>
+    <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li>
+        <li><a href="/resume">Resume</a></li>
+        <li><a href="/contact" class="active" aria-current="page">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="page-hero">
+      <div class="overline fade-up">Get in Touch</div>
+      <h1 class="fade-up delay-1">We'd love to hear from you.</h1>
+      <p class="subline fade-up delay-2">Send us a message, or find us at our office in Kumasi, Ghana.</p>
+    </section>
+
+    <section class="contact-split">
+
+      <div class="panel-left">
+        <div class="location-block fade-up">
+          <div class="pin-chip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="loc-primary">Atwima Twedie, Kumasi</div>
+            <div class="loc-secondary">Ashanti Region, Ghana</div>
+          </div>
+        </div>
+
+        <div class="map-wrap fade-up delay-1">
+          <iframe
+            title="Map of Atwima Twedie, Kumasi, Ghana"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=-1.7435285%2C6.6396976%2C-1.7035285%2C6.6796976&amp;layer=mapnik&amp;marker=6.6596976%2C-1.7235285"
+            loading="lazy"></iframe>
+          <div class="map-pin-pulse" aria-hidden="true">
+            <span class="ring"></span>
+            <span class="ring ring-2"></span>
+          </div>
+        </div>
+
+        <div class="hours-pill fade-up delay-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span>Mon – Fri · 9:00 AM – 5:00 PM GMT</span>
+        </div>
+      </div>
+
+      <div class="panel-right">
+        <section class="glass fade-up">
+          <form id="contactForm" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="fullName"><span class="req">*</span>Full Name</label>
+                <input type="text" id="fullName" name="fullName" placeholder="e.g. Ampea Benjamin Oppong" autocomplete="name" />
+                <div class="error-msg"></div>
+              </div>
+
+              <div class="field">
+                <label for="dob"><span class="req">*</span>Date of Birth</label>
+                <input type="date" id="dob" name="dob" min="1970-01-01" max="2026-12-31" />
+                <div class="error-msg"></div>
+              </div>
+
+              <div class="field">
+                <label for="email"><span class="req">*</span>Email Account</label>
+                <input type="email" id="email" name="email" placeholder="e.g. example@gmail.com" autocomplete="email" />
+                <div class="error-msg"></div>
+              </div>
+
+              <div class="field">
+                <label for="phoneNumber"><span class="req">*</span>Phone Number</label>
+                <div class="phone-row">
+                  <input type="hidden" id="countryCode" name="countryCode" value="+233">
+                  <div class="custom-select" id="countryCodeSelect" role="listbox" aria-label="Country code">
+                    <div class="select-selected" id="countryCodeSelected">
+                      <img src="https://flagcdn.com/24x18/gh.png" alt="Ghana flag" width="24" height="18">
+                      <span>+233</span>
+                    </div>
+                    <div class="select-items">
+                      <div class="select-item selected" data-value="+233" data-flag="gh">
+                        <img src="https://flagcdn.com/24x18/gh.png" alt="Ghana flag" width="24" height="18">
+                        <span>Ghana (+233)</span>
+                      </div>
+                      <div class="select-item" data-value="+234" data-flag="ng">
+                        <img src="https://flagcdn.com/24x18/ng.png" alt="Nigeria flag" width="24" height="18">
+                        <span>Nigeria (+234)</span>
+                      </div>
+                      <div class="select-item" data-value="+228" data-flag="tg">
+                        <img src="https://flagcdn.com/24x18/tg.png" alt="Togo flag" width="24" height="18">
+                        <span>Togo (+228)</span>
+                      </div>
+                      <div class="select-item" data-value="+1" data-flag="us">
+                        <img src="https://flagcdn.com/24x18/us.png" alt="United States flag" width="24" height="18">
+                        <span>United States (+1)</span>
+                      </div>
+                      <div class="select-item" data-value="+44" data-flag="gb">
+                        <img src="https://flagcdn.com/24x18/gb.png" alt="United Kingdom flag" width="24" height="18">
+                        <span>United Kingdom (+44)</span>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="e.g. 024 123 4567" autocomplete="tel" />
+                </div>
+                <div class="error-msg"></div>
+              </div>
+
+              <div class="field span-2">
+                <label for="subject"><span class="req">*</span>Subject</label>
+                <input type="text" id="subject" name="subject" placeholder="e.g. Partnership Enquiry" />
+                <div class="error-msg"></div>
+              </div>
+
+              <div class="field span-2">
+                <label for="message"><span class="req">*</span>What Do You Want To Say</label>
+                <textarea id="message" name="message" placeholder="Write your message here..."></textarea>
+                <div class="error-msg"></div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-send">Send Message</button>
+            <span id="status" role="status"></span>
+            <div id="send-note"></div>
+          </form>
+        </section>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner fade-up">
+      <div class="footer-tagline">Don't waste your time looking for the best resume. Use us.</div>
+      <div class="footer-links">
+        <h3>Links</h3>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/resume">Resume</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright fade-up delay-1">© 2026 QuickResume. All rights reserved.</div>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const links = document.getElementById('navLinks');
+
+    toggle.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // ---------- Form validation ----------
+    const form = document.getElementById('contactForm');
+    const fullName = document.getElementById('fullName');
+    const dob = document.getElementById('dob');
+    const email = document.getElementById('email');
+    const countryCode = document.getElementById('countryCode');
+    const phoneNumber = document.getElementById('phoneNumber');
+    const subject = document.getElementById('subject');
+    const message = document.getElementById('message');
+    const statusEl = document.getElementById('status');
+    const sendNote = document.getElementById('send-note');
+
+    function capitalizeWords(str) {
+      return str.replace(/\b[a-z]/g, c => c.toUpperCase());
+    }
+
+    function hasNonCapitalizedWord(str) {
+      return str.split(/\s+/).filter(Boolean).some(w => w[0] !== w[0].toUpperCase());
+    }
+
+    function setError(field, msg) {
+      field.classList.add('error');
+      const customSelect = field.parentElement.querySelector('.custom-select');
+      if (customSelect) customSelect.classList.add('error');
+      const wrap = field.closest('.field');
+      const err = wrap.querySelector('.error-msg');
+      err.textContent = msg;
+    }
+
+    function clearError(field) {
+      field.classList.remove('error');
+      const customSelect = field.parentElement.querySelector('.custom-select');
+      if (customSelect) customSelect.classList.remove('error');
+      const wrap = field.closest('.field');
+      if (!wrap) return;
+      const err = wrap.querySelector('.error-msg');
+      if (err) err.textContent = '';
+    }
+
+    function clearStatus() {
+      statusEl.textContent = '';
+      statusEl.classList.remove('success', 'failed');
+    }
+
+    fullName.addEventListener('input', () => {
+      fullName.value = capitalizeWords(fullName.value);
+      clearError(fullName);
+      clearStatus();
+    });
+
+    [dob, email, phoneNumber, subject, message].forEach(field => {
+      field.addEventListener('input', () => {
+        clearError(field);
+        clearStatus();
+      });
+      field.addEventListener('change', () => {
+        clearError(field);
+        clearStatus();
+      });
+    });
+
+    // ---------- Custom Country Code Dropdown ----------
+    const countryCodeSelect = document.getElementById('countryCodeSelect');
+    const countryCodeSelected = document.getElementById('countryCodeSelected');
+    const countryCodeItems = countryCodeSelect.querySelectorAll('.select-item');
+
+    countryCodeSelected.addEventListener('click', (e) => {
+      e.stopPropagation();
+      countryCodeSelect.classList.toggle('open');
+    });
+
+    countryCodeItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const value = item.getAttribute('data-value');
+        const flag = item.getAttribute('data-flag');
+        countryCode.value = value;
+        countryCodeSelected.innerHTML = `<img src="https://flagcdn.com/24x18/${flag}.png" alt="" width="24" height="18"><span>${value}</span>`;
+        countryCodeItems.forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        countryCodeSelect.classList.remove('open');
+        clearError(countryCode);
+        clearStatus();
+      });
+    });
+
+    document.addEventListener('click', () => {
+      countryCodeSelect.classList.remove('open');
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let ok = true;
+
+      // Clear previous state
+      [fullName, dob, email, countryCode, phoneNumber, subject, message].forEach(clearError);
+      clearStatus();
+      sendNote.textContent = '';
+
+      // Full Name
+      const name = fullName.value.trim();
+      if (!name) {
+        setError(fullName, 'Please fill the forms');
+        ok = false;
+      } else if (name.length > 50) {
+        setError(fullName, 'Maximum of 50 Characters Required');
+        ok = false;
+      } else if (hasNonCapitalizedWord(name)) {
+        setError(fullName, 'Each Words Inputted Should Be Capitalized');
+        ok = false;
+      }
+
+      // Date of Birth
+      if (!dob.value) {
+        setError(dob, 'Please fill the forms');
+        ok = false;
+      }
+
+      // Email Account — Gmail only
+      const mail = email.value.trim();
+      if (!mail) {
+        setError(email, 'Please fill the forms');
+        ok = false;
+      } else if (!mail.toLowerCase().endsWith('@gmail.com')) {
+        setError(email, 'Only Gmail Accounts Are Allowed');
+        ok = false;
+      }
+
+      // Phone Number
+      if (!countryCode.value) {
+        setError(countryCode, 'Please You Have Not Selected Anything');
+        ok = false;
+      }
+      if (!phoneNumber.value.trim()) {
+        setError(phoneNumber, 'Please fill the forms');
+        ok = false;
+      }
+
+      // Subject
+      if (!subject.value.trim()) {
+        setError(subject, 'Please fill the forms');
+        ok = false;
+      }
+
+      // What Do You Want To Say
+      if (!message.value.trim()) {
+        setError(message, 'Please fill the forms');
+        ok = false;
+      }
+
+      if (!ok) {
+        statusEl.textContent = 'FAILED';
+        statusEl.classList.add('failed');
+        return;
+      }
+
+      // Send through the server relay to the QuickResume inbox
+      const btn = form.querySelector('.btn-send');
+      btn.disabled = true;
+      statusEl.classList.remove('success', 'failed');
+      statusEl.classList.add('sending');
+      statusEl.textContent = 'SENDING';
+
+      try {
+        const res = await fetch('/contact/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fullName: fullName.value.trim(),
+            dob: formatDate(dob.value),
+            email: email.value.trim(),
+            phone: countryCode.value + ' ' + sanitizePhone(phoneNumber.value, countryCode.value),
+            subject: subject.value.trim(),
+            message: message.value.trim()
+          })
+        });
+        const out = await res.json();
+        if (!res.ok || !out.ok) {
+          throw new Error(out.message || 'Send failed');
+        }
+        statusEl.classList.remove('sending');
+        statusEl.textContent = 'MESSAGE SENT';
+        statusEl.classList.add('success');
+        form.reset();
+      } catch (err) {
+        statusEl.classList.remove('sending');
+        statusEl.textContent = 'FAILED';
+        statusEl.classList.add('failed');
+        sendNote.textContent = (err.message && !err.message.includes('fetch'))
+          ? err.message
+          : 'Message could not be sent. Check your connection and try again.';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    function sanitizePhone(raw, code) {
+      let value = raw.trim();
+      // Remove any non-digit characters, keeping spaces, for comparison
+      const digits = value.replace(/\D/g, '');
+      const codeDigits = code.replace(/\D/g, '');
+      // If the number already starts with the country code, strip it
+      if (digits.startsWith(codeDigits) && codeDigits.length > 1) {
+        value = value.replace(new RegExp('^\\s*' + code.replace(/[+]/g, '\\+') + '[\\s-]*'), '').trim();
+      }
+      return value;
+    }
+
+    function formatDate(iso) {
+      const [y, m, d] = iso.split('-').map(Number);
+      return new Date(y, m - 1, d).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+  </script>
+
+</body>
+</html>

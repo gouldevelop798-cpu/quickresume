@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QuickResume — Your Resume is Ready</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy: #0A2540;
+    --slate-blue: #123A66;
+    --accent: #2563EB;
+    --amber: #F5B700;
+    --off-white: #F8FAFC;
+    --body-text: #334155;
+    --white: #FFFFFF;
+    --danger: #EF4444;
+    --success: #22C55E;
+    --radius: 12px;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--body-text);
+    background: var(--navy);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    line-height: 1.15;
+  }
+
+  a, button {
+    cursor: pointer;
+  }
+
+  /* ---------- Page background ---------- */
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(37, 99, 235, 0.45), transparent 60%),
+      radial-gradient(700px 460px at 5% 110%, rgba(245, 183, 0, 0.12), transparent 60%),
+      linear-gradient(135deg, #0A2540 0%, #123A66 60%, #0A2540 100%);
+  }
+
+  .blob {
+    position: fixed;
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .blob-1 {
+    width: 420px;
+    height: 420px;
+    top: -120px;
+    right: -110px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.5), transparent 70%);
+  }
+
+  .blob-2 {
+    width: 380px;
+    height: 380px;
+    bottom: -140px;
+    left: -130px;
+    background: radial-gradient(circle, rgba(245, 183, 0, 0.18), transparent 70%);
+  }
+
+  .blob-3 {
+    width: 300px;
+    height: 300px;
+    top: 40%;
+    left: 55%;
+    background: radial-gradient(circle, rgba(79, 138, 255, 0.35), transparent 70%);
+  }
+
+  /* ---------- Navigation ---------- */
+  .nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    padding: 0 48px;
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .logo {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+  }
+
+  .logo span {
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    padding: 6px 2px;
+    position: relative;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--white);
+  }
+
+  .nav-links a.active {
+    color: #8FB7FF;
+  }
+
+  .nav-links a.active::after {
+    transform: scaleX(1);
+  }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 8px;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--white);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .nav-toggle.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav-toggle.open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ---------- Layout ---------- */
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 130px 24px 120px;
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .delay-1 { transition-delay: 0.15s; }
+  .delay-2 { transition-delay: 0.3s; }
+
+  /* ---------- Glass panel (large dome) ---------- */
+  .glass {
+    background: rgba(255, 255, 255, 0.14);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    box-shadow: 0 24px 60px rgba(2, 12, 26, 0.45);
+    padding: 48px 48px 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .glass h1 {
+    color: var(--white);
+    font-size: 32px;
+    letter-spacing: -0.5px;
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  /* ---------- Resume preview box ---------- */
+  .resume-preview {
+    width: 100%;
+    max-width: 720px;
+    background: var(--white);
+    border: 1.5px solid #CBD5E1;
+    border-radius: 14px;
+    padding: 48px 52px;
+    min-height: 520px;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    cursor: default;
+    user-select: none;
+  }
+
+  .resume-preview * {
+    pointer-events: none;
+  }
+
+  /* ---------- Internal resume layout ---------- */
+  .rp-header {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding-bottom: 28px;
+    border-bottom: 2px solid #E2E8F0;
+    margin-bottom: 28px;
+  }
+
+  .rp-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--accent);
+    flex-shrink: 0;
+    background: #E2E8F0;
+  }
+
+  .rp-photo-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px dashed #CBD5E1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F1F5F9;
+  }
+
+  .rp-photo-placeholder svg {
+    color: #94A3B8;
+  }
+
+  .rp-name-block {
+    flex: 1;
+  }
+
+  .rp-name {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .rp-dob {
+    font-size: 14px;
+    color: #64748B;
+  }
+
+  .rp-section {
+    margin-bottom: 24px;
+  }
+
+  .rp-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .rp-section-title {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+
+  .rp-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 32px;
+  }
+
+  .rp-detail-item .rp-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .rp-detail-item .rp-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--navy);
+  }
+
+  .rp-skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .rp-skill-tag {
+    display: inline-block;
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+
+  .rp-achievements {
+    font-size: 15px;
+    color: var(--body-text);
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+
+  /* ---------- Action buttons ---------- */
+  .btn-row {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .btn-download {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 16px 40px;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-download svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .btn-docx {
+    background: var(--navy);
+  }
+
+  .btn-docx:hover {
+    background: #0D1E30;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(10, 37, 64, 0.4);
+  }
+
+  .btn-pdf {
+    background: #FF0000;
+  }
+
+  .btn-pdf:hover {
+    background: #CC0000;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(255, 0, 0, 0.3);
+  }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    background: var(--navy);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 72px 48px 32px;
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+
+  .footer-tagline {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--white);
+    max-width: 420px;
+    line-height: 1.35;
+  }
+
+  .footer-links h3 {
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+
+  .footer-links ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-links a {
+    background: none;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #B7C6DC;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover {
+    color: var(--white);
+  }
+
+  .copyright {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    font-size: 13px;
+    color: #7A8CA6;
+  }
+
+  /* ---------- No-data fallback ---------- */
+  .no-data {
+    text-align: center;
+    padding: 60px 24px;
+    color: #94A3B8;
+  }
+
+  .no-data h2 {
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+
+  .no-data p {
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+
+  .no-data .btn-back {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--white);
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    padding: 14px 36px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .no-data .btn-back:hover {
+    background: #1E4FCF;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1100px) {
+    .nav {
+      padding: 0 28px;
+    }
+
+    main {
+      padding: 120px 28px 90px;
+    }
+
+    .footer {
+      padding: 56px 28px 28px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .nav {
+      padding: 0 24px;
+    }
+
+    .nav-toggle {
+      display: flex;
+    }
+
+    .nav-links {
+      position: absolute;
+      top: 68px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--white);
+      border-bottom: 1px solid #E2E8F0;
+      padding: 16px 24px 24px;
+      box-shadow: 0 12px 24px rgba(10, 37, 64, 0.08);
+      opacity: 0;
+      transform: translateY(-12px);
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .nav-links.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .nav-links a {
+      width: 100%;
+      text-align: left;
+      padding: 12px 4px;
+      font-size: 16px;
+      color: var(--navy);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent);
+    }
+
+    .nav-links a.active::after {
+      display: none;
+    }
+
+    main {
+      padding: 110px 16px 80px;
+    }
+
+    .glass {
+      padding: 28px 20px 32px;
+      border-radius: 24px;
+    }
+
+    .glass h1 {
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+
+    .resume-preview {
+      padding: 28px 24px;
+      min-height: 400px;
+    }
+
+    .rp-header {
+      flex-direction: column;
+      text-align: center;
+      gap: 16px;
+    }
+
+    .rp-photo,
+    .rp-photo-placeholder {
+      width: 96px;
+      height: 96px;
+    }
+
+    .rp-name {
+      font-size: 20px;
+    }
+
+    .rp-detail-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .btn-row {
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .btn-download {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .footer {
+      padding: 56px 24px 28px;
+    }
+
+    .footer-inner {
+      flex-direction: column;
+      gap: 36px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nav {
+      padding: 0 16px;
+    }
+
+    .logo {
+      font-size: 19px;
+    }
+
+    main {
+      padding: 100px 12px 80px;
+    }
+
+    .glass {
+      padding: 24px 14px 28px;
+      border-radius: 20px;
+    }
+
+    .glass h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .resume-preview {
+      padding: 22px 16px;
+      min-height: 360px;
+    }
+
+    .rp-name {
+      font-size: 19px;
+    }
+
+    .btn-row {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-download {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .footer {
+      padding: 44px 16px 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-up {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="page-bg"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <header class="nav">
+    <a href="/" class="logo">Quick<span>Resume</span></a>
+    <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li>
+        <li><a href="/resume" class="active" aria-current="page">Resume</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="glass fade-up">
+      <h1>Your Resume is Ready</h1>
+
+      <div class="resume-preview" id="resumePreview">
+        <div class="no-data" id="noData" style="display:none;">
+          <h2>No Resume Data Found</h2>
+          <p>Please go back and generate your resume first.</p>
+          <a href="/resume" class="btn-back">Go to Resume</a>
+        </div>
+      </div>
+
+      <div class="btn-row fade-up delay-1">
+        <button type="button" class="btn-download btn-docx" id="btnDocx">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Save as .DOCX file
+        </button>
+        <button type="button" class="btn-download btn-pdf" id="btnPdf">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Save as .PDF file
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner fade-up">
+      <div class="footer-tagline">Don't waste your time looking for the best resume. Use us.</div>
+      <div class="footer-links">
+        <h3>Links</h3>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/resume">Resume</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright fade-up delay-1">© 2026 QuickResume. All rights reserved.</div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // ---------- Nav toggle ----------
+    const toggle = document.querySelector('.nav-toggle');
+    const links = document.getElementById('navLinks');
+
+    toggle.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // ---------- Scroll animations ----------
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // ---------- Load resume data from sessionStorage ----------
+    const preview = document.getElementById('resumePreview');
+    const noData = document.getElementById('noData');
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const parts = dateStr.split('-');
+      if (parts.length !== 3) return dateStr;
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const month = months[parseInt(parts[1], 10) - 1];
+      const day = parseInt(parts[2], 10);
+      const year = parts[0];
+      return month + ' ' + day + ', ' + year;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function renderResume() {
+      const dataRaw = sessionStorage.getItem('resumeData');
+      if (!dataRaw) {
+        noData.style.display = 'block';
+        return;
+      }
+
+      let data;
+      try {
+        data = JSON.parse(dataRaw);
+      } catch (e) {
+        noData.style.display = 'block';
+        return;
+      }
+
+      const photoSrc = data.photo || '';
+      const fullName = data.fullName || 'Your Name';
+      const dob = data.dob || '';
+      const university = data.university || '';
+      const department = data.department || '';
+      const skills = data.skills || '';
+      const achievements = data.achievements || '';
+
+      let photoHtml;
+      if (photoSrc) {
+        photoHtml = '<img class="rp-photo" src="' + escapeHtml(photoSrc) + '" alt="Profile photo" />';
+      } else {
+        photoHtml = '<div class="rp-photo-placeholder"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
+      }
+
+      let sectionsHtml = '';
+
+      sectionsHtml += '<div class="rp-section">';
+      sectionsHtml += '<div class="rp-section-title">Personal Information</div>';
+      sectionsHtml += '<div class="rp-detail-grid">';
+      if (university) {
+        sectionsHtml += '<div class="rp-detail-item"><div class="rp-label">University</div><div class="rp-value">' + escapeHtml(university) + '</div></div>';
+      }
+      if (department) {
+        sectionsHtml += '<div class="rp-detail-item"><div class="rp-label">Department</div><div class="rp-value">' + escapeHtml(department) + '</div></div>';
+      }
+      sectionsHtml += '</div>';
+      sectionsHtml += '</div>';
+
+      if (skills) {
+        sectionsHtml += '<div class="rp-section">';
+        sectionsHtml += '<div class="rp-section-title">Skills</div>';
+        sectionsHtml += '<div class="rp-skills-list">';
+        sectionsHtml += '<span class="rp-skill-tag">' + escapeHtml(skills) + '</span>';
+        sectionsHtml += '</div>';
+        sectionsHtml += '</div>';
+      }
+
+      if (achievements) {
+        sectionsHtml += '<div class="rp-section">';
+        sectionsHtml += '<div class="rp-section-title">Achievements</div>';
+        sectionsHtml += '<div class="rp-achievements">' + escapeHtml(achievements) + '</div>';
+        sectionsHtml += '</div>';
+      }
+
+      preview.innerHTML =
+        '<div class="rp-header">' +
+          photoHtml +
+          '<div class="rp-name-block">' +
+            '<div class="rp-name">' + escapeHtml(fullName) + '</div>' +
+            (dob ? '<div class="rp-dob">Date of Birth: ' + escapeHtml(formatDate(dob)) + '</div>' : '') +
+          '</div>' +
+        '</div>' +
+        sectionsHtml;
+    }
+
+    renderResume();
+
+    // ---------- Helper: read resume data ----------
+    function getResumeData() {
+      const raw = sessionStorage.getItem('resumeData');
+      if (!raw) { alert('No resume data found.'); return null; }
+      try { return JSON.parse(raw); } catch (e) { alert('Resume data is corrupted.'); return null; }
+    }
+
+    // ---------- PDF download (jsPDF) ----------
+    document.getElementById('btnPdf').addEventListener('click', () => {
+      const data = getResumeData();
+      if (!data) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const pageW = 210;
+      const mx = 20;
+      const cw = pageW - mx * 2;
+      let y = 20;
+
+      function secTitle(label) {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(37, 99, 235);
+        doc.text(label.toUpperCase(), mx, y);
+        y += 5;
+        doc.setDrawColor(226, 232, 240);
+        doc.setLineWidth(0.25);
+        doc.line(mx, y, pageW - mx, y);
+        y += 7;
+      }
+
+      /* ---- Header: photo left + name/DOB right ---- */
+      var photoSz = 28;
+      var hasPhoto = !!data.photo;
+      if (hasPhoto) {
+        try { doc.addImage(data.photo, 'JPEG', mx, y, photoSz, photoSz); }
+        catch (e) { hasPhoto = false; }
+      }
+
+      var nameX = hasPhoto ? mx + photoSz + 8 : mx;
+      var nameY = hasPhoto ? y + photoSz / 2 - 2 : y + 8;
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.setTextColor(10, 37, 64);
+      doc.text(data.fullName || 'Your Name', nameX, nameY);
+
+      if (data.dob) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(100, 116, 139);
+        doc.text('Date of Birth: ' + formatDate(data.dob), nameX, nameY + 7);
+      }
+
+      y += hasPhoto ? photoSz + 6 : 22;
+
+      /* ---- Blue separator (matches 2px border-bottom on .rp-header) ---- */
+      doc.setDrawColor(37, 99, 235);
+      doc.setLineWidth(0.6);
+      doc.line(mx, y, pageW - mx, y);
+      y += 10;
+
+      /* ---- Personal Information ---- */
+      secTitle('Personal Information');
+
+      if (data.university || data.department) {
+        var col2x = mx + cw / 2 + 8;
+        if (data.university) {
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7);
+          doc.setTextColor(148, 163, 184);
+          doc.text('UNIVERSITY', mx, y);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(10);
+          doc.setTextColor(10, 37, 64);
+          doc.text(data.university, mx, y + 5);
+        }
+        if (data.department) {
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7);
+          doc.setTextColor(148, 163, 184);
+          doc.text('DEPARTMENT', col2x, y);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(10);
+          doc.setTextColor(10, 37, 64);
+          doc.text(data.department, col2x, y + 5);
+        }
+        y += 14;
+      }
+
+      /* ---- Skills (pill tags) ---- */
+      if (data.skills) {
+        secTitle('Skills');
+
+        var tags = data.skills.includes(',')
+          ? data.skills.split(',').map(function(s){ return s.trim(); }).filter(Boolean)
+          : [data.skills.trim()];
+
+        var tagX = mx;
+        var tagH = 7;
+        var padX = 4;
+
+        for (var i = 0; i < tags.length; i++) {
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(9);
+          doc.setTextColor(37, 99, 235);
+
+          var tw = doc.getTextWidth(tags[i]);
+          var tagW = tw + padX * 2;
+
+          if (tagX + tagW > pageW - mx) {
+            tagX = mx;
+            y += tagH + 3;
+          }
+
+          doc.setFillColor(228, 238, 255);
+          doc.roundedRect(tagX, y - tagH + 2, tagW, tagH, 3.5, 3.5, 'F');
+          doc.text(tags[i], tagX + padX, y);
+          tagX += tagW + 4;
+        }
+        y += 10;
+      }
+
+      /* ---- Achievements ---- */
+      if (data.achievements) {
+        secTitle('Achievements');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(51, 65, 85);
+        var achLines = doc.splitTextToSize(data.achievements, cw);
+        doc.text(achLines, mx, y);
+      }
+
+      doc.save((data.fullName || 'Resume') + '.pdf');
+    });
+
+    // ---------- DOCX download (HTML-based Word file) ----------
+    document.getElementById('btnDocx').addEventListener('click', () => {
+      const data = getResumeData();
+      if (!data) return;
+
+      var photoCell = data.photo
+        ? '<td width="120" valign="middle" style="padding-right:24px"><img src="' + data.photo + '" width="96" height="96" style="border-radius:50%;object-fit:cover;border:2px solid #2563EB" /></td>'
+        : '<td width="120" valign="middle" style="padding-right:24px"></td>';
+
+      var skillsHtml = '';
+      if (data.skills) {
+        var tags = data.skills.includes(',')
+          ? data.skills.split(',').map(function(s){ return s.trim(); }).filter(Boolean)
+          : [data.skills.trim()];
+        skillsHtml = '<div class="sec-title">SKILLS</div><p style="margin:6px 0 0">' +
+          tags.map(function(t){ return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('') + '</p>';
+      }
+
+      var achHtml = '';
+      if (data.achievements) {
+        achHtml = '<div class="sec-title">ACHIEVEMENTS</div><div class="ach">' + escapeHtml(data.achievements) + '</div>';
+      }
+
+      var html = [
+        '<html xmlns:o="urn:schemas-microsoft-com:office:office"',
+        ' xmlns:w="urn:schemas-microsoft-com:office:word"',
+        ' xmlns="http://www.w3.org/TR/REC-html40">',
+        '<head><meta charset="utf-8"><style>',
+        'body{font-family:Calibri,sans-serif;color:#334155;margin:40px;line-height:1.5}',
+        '.sec-title{font-size:11pt;font-weight:bold;color:#2563EB;text-transform:uppercase;letter-spacing:1px;margin:18px 0 6px;padding-bottom:4px;border-bottom:1px solid #E2E8F0}',
+        '.flbl{font-size:8pt;font-weight:bold;color:#94A3B8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:1px}',
+        '.fval{font-size:11pt;color:#0A2540;margin-bottom:6px}',
+        '.tag{display:inline-block;background:#E4F0FF;color:#2563EB;font-size:9pt;font-weight:600;padding:4px 12px;border-radius:14px;margin:0 8px 6px 0}',
+        '.ach{font-size:11pt;color:#334155;white-space:pre-wrap;line-height:1.6;margin:0}',
+        '</style></head><body>',
+        '<table width="100%" cellpadding="0" cellspacing="0" style="border-bottom:2px solid #2563EB;padding-bottom:16px;margin-bottom:24px">',
+        '<tr>',
+        photoCell,
+        '<td valign="middle">',
+        '<div style="font-size:20pt;font-weight:bold;color:#0A2540;margin:0 0 4px">' + escapeHtml(data.fullName || 'Your Name') + '</div>',
+        data.dob ? '<div style="font-size:10pt;color:#64748B;margin:0">Date of Birth: ' + escapeHtml(formatDate(data.dob)) + '</div>' : '',
+        '</td></tr></table>',
+        '<div class="sec-title">PERSONAL INFORMATION</div>',
+        '<table width="100%" cellpadding="0" cellspacing="0"><tr>',
+        '<td width="50%" valign="top">',
+        data.university ? '<div class="flbl">UNIVERSITY</div><div class="fval">' + escapeHtml(data.university) + '</div>' : '',
+        '</td>',
+        '<td width="50%" valign="top">',
+        data.department ? '<div class="flbl">DEPARTMENT</div><div class="fval">' + escapeHtml(data.department) + '</div>' : '',
+        '</td></tr></table>',
+        skillsHtml,
+        achHtml,
+        '</body></html>'
+      ].join('\n');
+
+      var blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = (data.fullName || 'Resume') + '.doc';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+
+</body>
+</html>
