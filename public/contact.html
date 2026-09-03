@@ -1237,22 +1237,38 @@
       statusEl.textContent = 'SENDING';
 
       try {
-        const res = await fetch('/contact/send', {
+        // Send directly to FormSubmit's client-side AJAX endpoint.
+        // Posting from the visitor's browser passes Cloudflare for real users,
+        // whereas a server-side relay is blocked with a challenge page.
+        const res = await fetch('https://formsubmit.co/ajax/gouldevelop798@gmail.com', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
-            fullName: fullName.value.trim(),
-            dob: formatDate(dob.value),
-            email: email.value.trim(),
-            phone: countryCode.value + ' ' + sanitizePhone(phoneNumber.value, countryCode.value),
-            subject: subject.value.trim(),
-            message: message.value.trim()
+            _subject: `QuickResume Contact: ${subject.value.trim()}`,
+            _template: 'table',
+            _captcha: 'false',
+            'Full Name': fullName.value.trim(),
+            'Date of Birth': formatDate(dob.value),
+            'Email Account': email.value.trim(),
+            'Phone Number': countryCode.value + ' ' + sanitizePhone(phoneNumber.value, countryCode.value),
+            'Subject': subject.value.trim(),
+            'What Do You Want To Say': message.value.trim()
           })
         });
-        const out = await res.json();
-        if (!res.ok || !out.ok) {
-          const err = new Error(out.message || 'Send failed');
-          if (out.activation) {
+
+        let out;
+        try {
+          out = await res.json();
+        } catch {
+          throw new Error('The message service did not respond correctly. Please try again or contact us directly by email.');
+        }
+
+        if (!res.ok || String(out.success).toLowerCase() !== 'true') {
+          const msg = out.message || 'Send failed';
+          const err = new Error(/activation|activate/i.test(String(msg))
+            ? 'The inbox email is not activated yet. Its owner must visit formsubmit.co/email/gouldevelop798@gmail.com and click the "Activate Form" link sent to that address once before messages can be received.'
+            : msg);
+          if (/activation|activate/i.test(String(msg))) {
             err.activation = true;
           }
           throw err;
