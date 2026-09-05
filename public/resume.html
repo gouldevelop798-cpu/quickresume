@@ -382,6 +382,43 @@
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
   }
 
+  /* Date of Birth: native date inputs don't show placeholder text on
+     mobile/tablet browsers, so we overlay it via a wrapped pseudo-element. */
+  .date-wrap {
+    position: relative;
+  }
+
+  .date-wrap::before {
+    content: attr(data-placeholder);
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: calc(100% - 48px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #64748B;
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.15s ease;
+  }
+
+  .date-wrap.is-filled::before,
+  .date-wrap:focus-within::before {
+    opacity: 0;
+  }
+
+  .date-wrap:not(.is-filled) input[type="date"] {
+    color: transparent;
+  }
+
+  .date-wrap:not(.is-filled) input[type="date"]::-webkit-datetime-edit {
+    color: transparent;
+  }
+
   .error-msg {
     font-size: 12.5px;
     font-weight: 500;
@@ -712,7 +749,9 @@
 
           <div class="field">
             <label for="dob"><span class="req">*</span>Date of Birth</label>
-            <input type="date" id="dob" name="dob" min="1970-01-01" max="2026-12-31" />
+            <div class="date-wrap" data-placeholder="Select your date of birth">
+              <input type="date" id="dob" name="dob" placeholder="Select your date of birth" min="1970-01-01" max="2026-12-31" />
+            </div>
             <div class="error-msg"></div>
           </div>
 
@@ -948,6 +987,15 @@
     const skillsOther = document.getElementById('skillsOther');
     const achievements = document.getElementById('achievements');
     const statusEl = document.getElementById('status');
+
+    // Date of Birth placeholder toggle (mobile/tablet)
+    const dobWrap = dob.closest('.date-wrap');
+    function syncDobPlaceholder() {
+      if (dobWrap) dobWrap.classList.toggle('is-filled', dob.value !== '');
+    }
+    dob.addEventListener('input', syncDobPlaceholder);
+    dob.addEventListener('change', syncDobPlaceholder);
+    syncDobPlaceholder();
 
     function capitalizeWords(str) {
       return str.replace(/\b[a-z]/g, c => c.toUpperCase());
